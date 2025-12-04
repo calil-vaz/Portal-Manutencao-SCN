@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Manutenção SCN | Grupo Pereira</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="../global.css">
+    <link rel="icon" href="../img/icon-gp-pereira.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar com filtros -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <img class="logo-gp-pereira" src="../img/logo-gp-pereira.svg" alt="Logo do Grupo Pereira">
+            </div>
+            
+            <!-- Filtros integrados na navbar -->
+            <div class="navbar-toggle" id="navbar-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="navbar-filters">
+                <div class="filter-group">
+                    <i class="fas fa-building filter-icon"></i>
+                    <select id="filial-filter" class="filter-select">
+                        <option value="">Todas as Filiais</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <i class="fas fa-user filter-icon"></i>
+                    <select id="responsavel-filter" class="filter-select">
+                        <option value="">Todos os Responsáveis</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <i class="fas fa-cog filter-icon"></i>
+                    <select id="tipo-filter" class="filter-select">
+                        <option value="">Todos os Tipos</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <i class="fas fa-info-circle filter-icon"></i>
+                    <select id="status-filter" class="filter-select">
+                        <option value="">Todos os Status</option>
+                        <option value="A">Abertas</option>
+                        <option value="F">Fechadas</option>
+                    </select>
+                </div>
+                
+                <button id="clear-filters" class="btn-clear">
+                    <i class="fas fa-times"></i>
+                    Limpar
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <i class="fas fa-chart-line hero-icon"></i>
+                    Portal Manutenção
+                </h1>
+                <p class="hero-subtitle">Ordens de Serviço - Regional SCN</p>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <i class="fas fa-clock"></i>
+                        <a class="link" href="../">Acompanhamento Mensal</a>
+                    </div>
+                    <div class="hero-stat">
+                        <i class="fas fa-shield-alt"></i>
+                        <a class="link" href="./">Ordens de Serviço</a>
+                    </div>
+                    <div class="hero-stat">
+                        <i class="fas fa-mobile-alt"></i>
+                        <a class="link" href="../Tarefas/">Tarefas</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Importação de Dados -->
+        <section class="import-section">
+            <!-- <h2 class="section-title">
+                <i class="fas fa-upload"></i>
+                Importar Dados
+            </h2> -->
+            <div class="import-container">
+                <div class="import-card">
+                    <div class="import-icon">
+                        <i class="fas fa-file-upload"></i>
+                    </div>
+                    <div class="import-content">
+                        <h3>Selecione o arquivo JSON</h3>
+                        <p>Faça upload do arquivo contendo os dados das ordens de serviço</p>
+                        <input type="file" id="json-file-input" accept=".json" class="file-input">
+                        <label for="json-file-input" class="file-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            Escolher Arquivo
+                        </label>
+                        <div id="file-info" class="file-info"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cards de Estatísticas Gerais -->
+        <section class="stats-section">
+            <h2 class="section-title">
+                <i class="fas fa-chart-bar"></i>
+                Estatísticas Gerais
+            </h2>
+            <div class="stats-grid">
+                <div class="stat-card total-orders">
+                    <div class="stat-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Total de Ordens</h3>
+                        <p class="stat-number" id="total-ordens">0</p>
+                        <span class="stat-trend">
+                            <i class="fas fa-arrow-up"></i>
+                            Todas as ordens
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="stat-card open-orders">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Ordens Abertas</h3>
+                        <p class="stat-number" id="ordens-abertas">0</p>
+                        <span class="stat-trend">
+                            <i class="fas fa-exclamation-circle"></i>
+                            Em andamento
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="stat-card closed-orders">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Ordens Fechadas</h3>
+                        <p class="stat-number" id="ordens-fechadas">0</p>
+                        <span class="stat-trend">
+                            <i class="fas fa-thumbs-up"></i>
+                            Concluídas
+                        </span>
+                    </div>
+                </div>
+
+                <div class="stat-card planned-orders">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Ordens Planejadas</h3>
+                        <p class="stat-number" id="ordens-planejadas">0</p>
+                        <span class="stat-trend">
+                            <i class="fas fa-calendar"></i>
+                            Preventivas
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gráficos -->
+        <section class="charts-section">
+            <h2 class="section-title">
+                <i class="fas fa-chart-pie"></i>
+                Análise Visual dos Dados
+            </h2>
+
+            <div class="charts-grid">
+                <!-- Gráfico de Status das Ordens -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-info-circle"></i> Status das Ordens</h3>
+                        <div class="chart-actions">
+                            <button class="chart-btn" title="Expandir">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="status-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 id="totalPlanejadas"><i class="fas fa-percentage"></i></h3>
+                        <!-- <p class="efficiency-percentage" id="eficiencia-geral">0%</p> -->
+                        <div class="chart-actions">
+                            <button class="chart-btn" title="Expandir">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        <br>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="eficiencia-chart"></canvas>
+                        <!-- <div class="efficiency-info">
+                            <div class="efficiency-card">
+                                <h4>Eficiência Geral</h4>
+                                <p class="efficiency-percentage" id="eficiencia-geral">0%</p>
+                            </div>
+                        </div> -->
+                    </div>
+                    
+                </div>
+                <!-- Gráfico TOP 5 Filiais -->
+                <div class="chart-container chart-wide">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-store"></i> TOP 10 Filiais - Ordens Abertas</h3>
+                        <div class="chart-actions">
+                            <button class="chart-btn" title="Expandir">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="top-filiais-chart"></canvas>
+                    </div>
+                </div>
+                <!-- Gráfico de Tipos de Manutenção -->
+                <!-- <div class="chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-tools"></i> Tipos de Manutenção</h3>
+                        <div class="chart-actions">
+                            <button class="chart-btn" title="Expandir">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="tipo-manutencao-chart"></canvas>
+                    </div>
+                </div> -->
+                
+                
+
+                <!-- Gráfico Ordens por Mês -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-calendar-alt"></i> Ordens Abertas x Fechadas por Mês</h3>
+                        <div class="chart-actions">
+                            <button class="chart-btn" title="Expandir">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="ordens-mes-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico Eficiência Ordens Planejadas -->
+                <!-- <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 id="totalPlanejadas"><i class="fas fa-percentage"></i>Eficiência - Ordens Planejadas</h3>
+                        <div class="chart-actions">
+                            <button class="chart-btn" title="Expandir">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        <br>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="eficiencia-chart"></canvas>
+                        <div class="efficiency-info">
+                            <div class="efficiency-card">
+                                <h4>Eficiência Geral</h4>
+                                <p class="efficiency-percentage" id="eficiencia-geral">0%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-tools"></i> Tipos de Manutenção</h3>
+                        <div class="chart-actions">
+                            <button class="chart-btn" title="Expandir">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="tipo-manutencao-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico Responsáveis com OS Abertas -->
+                <!-- <div class="chart-container chart-wide">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-user-clock"></i> Responsáveis que não fecham OS</h3>
+                        <div class="chart-actions">
+                            <button class="chart-btn" title="Expandir">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="responsaveis-abertas-chart"></canvas>
+                    </div>
+                </div> -->
+            </div>
+        </section>
+
+        <!-- TOP 10 Responsáveis -->
+        <section class="top-responsaveis-section">
+            <h2 class="section-title">
+                <i class="fas fa-users"></i>
+                TOP 10 Responsáveis - Ordens Abertas
+            </h2>
+            <div class="top-responsaveis-container">
+                <div class="top-responsaveis-card">
+                    <div class="top-responsaveis-header">
+                        <div class="top-responsaveis-info">
+                            <i class="fas fa-trophy"></i>
+                            <p>Responsáveis com mais O.S. abertas</p>
+                        </div>
+                        <div class="top-responsaveis-actions">
+                            <button class="table-btn" id="export-responsaveis-btn" title="Exportar">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="top-responsaveis-wrapper">
+                        <table id="top-responsaveis-table" class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-medal"></i> Posição</th>
+                                    <th><i class="fas fa-user"></i> Responsável</th>
+                                    <th><i class="fas fa-clipboard-list"></i> Ordens Abertas</th>
+                                    <th><i class="fas fa-percentage"></i> % do Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="top-responsaveis-body">
+                                <tr>
+                                    <td colspan="4" style="text-align: center;">Nenhum dado carregado. Importe um arquivo JSON para visualizar o ranking.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tabela OS sem Dono -->
+        <section class="table-section">
+            <h2 class="section-title">
+                <i class="fas fa-user-times"></i>
+                OS sem Responsável
+            </h2>
+            <div class="table-container">
+                <div class="table-header">
+                    <div class="table-info">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Ordens de serviço que não possuem responsável definido</p>
+                    </div>
+                    <div class="table-actions">
+                        <div class="filter-group">
+                            <i class="fas fa-filter filter-icon"></i>
+                            <select id="tipo-sem-dono-filter" class="filter-select">
+                                <option value="">Todos os Tipos</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <i class="fas fa-info-circle filter-icon"></i>
+                            <select id="status-sem-dono-filter" class="filter-select">
+                                <option value="">Todos os Status</option>
+                                <option value="A">Abertas</option>
+                                <option value="F">Fechadas</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <i class="fas fa-calendar-alt filter-icon"></i>
+                            <select id="planejada-sem-dono-filter" class="filter-select">
+                                <option value="">Todas</option>
+                                <option value="sim">Planejadas</option>
+                                <option value="nao">Não Planejadas</option>
+                            </select>
+                        </div>
+                        <button class="table-btn" id="export-sem-dono-btn" title="Exportar">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="table-btn" id="refresh-sem-dono-btn" title="Atualizar">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table id="ordens-sem-dono-table" class="modern-table">
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-tag"></i> Tag</th>
+                                <th><i class="fas fa-calendar"></i> Data Abertura</th>
+                                <th><i class="fas fa-info"></i> Status</th>
+                                <th><i class="fas fa-building"></i> Filial</th>
+                                <th><i class="fas fa-cog"></i> Tipo</th>
+                                <th><i class="fas fa-calendar-check"></i> Planejada</th>
+                                <th><i class="fas fa-user"></i> Solicitante</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordens-sem-dono-table-body">
+                            <tr>
+                                <td colspan="7" style="text-align: center;">Nenhum dado carregado. Importe um arquivo JSON para visualizar as ordens sem responsável.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tabela de Dados -->
+        <section class="table-section">
+            <h2 class="section-title">
+                <i class="fas fa-table"></i>
+                Detalhes das Ordens de Serviço
+            </h2>
+            <div class="table-container">
+                <div class="table-header">
+                    <div class="table-info">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Lista detalhada das ordens de serviço filtradas</p>
+                    </div>
+                    <div class="table-actions">
+                        <div class="filter-group">
+                            <i class="fas fa-info-circle filter-icon"></i>
+                            <select id="status-detalhes-filter" class="filter-select">
+                                <option value="">Todos os Status</option>
+                                <option value="A">Abertas</option>
+                                <option value="F">Fechadas</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <i class="fas fa-filter filter-icon"></i>
+                            <select id="tipo-detalhes-filter" class="filter-select">
+                                <option value="">Todos os Tipos</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <i class="fas fa-calendar-alt filter-icon"></i>
+                            <select id="planejada-detalhes-filter" class="filter-select">
+                                <option value="">Todas</option>
+                                <option value="sim">Planejadas</option>
+                                <option value="nao">Não Planejadas</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <i class="fas fa-user filter-icon"></i>
+                            <select id="responsavel-detalhes-filter" class="filter-select">
+                                <option value="">Todos os Responsáveis</option>
+                            </select>
+                        </div>
+                        <button class="table-btn" id="export-btn" title="Exportar">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="table-btn" id="refresh-btn" title="Atualizar">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table id="ordens-table" class="modern-table">
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-tag"></i> Tag</th>
+                                <th><i class="fas fa-calendar"></i> Data Abertura</th>
+                                <th><i class="fas fa-info"></i> Status</th>
+                                <th><i class="fas fa-building"></i> Filial</th>
+                                <th><i class="fas fa-user"></i> Responsável</th>
+                                <th><i class="fas fa-cog"></i> Tipo</th>
+                                <th><i class="fas fa-calendar-check"></i> Planejada</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordens-table-body">
+                            <tr>
+                                <td colspan="7" style="text-align: center;">Nenhum dado carregado. Importe um arquivo JSON para visualizar as ordens.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Loading overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Processando dados...</p>
+        </div>
+    </div>
+
+        <footer class="footer">
+        <div class="footer-bottom">
+            <p>Desenvolvido por Calil Asir Vaz Velozo - PCM SCN</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="scripts.js"></script>
+</body>
+</html>
+

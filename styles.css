@@ -1,0 +1,567 @@
+
+.filter-group {
+    transition: all 0.3s ease;
+}
+
+.filter-group label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+
+.filter-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.btn-clear {
+    display: flex;
+    align-items: center;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--accent-red);
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+    border-radius: var(--radius-md);
+    transition: var(--transition);
+}
+
+.btn-clear:hover {
+    transform: translateY(-2px);
+    background: var(--accent-red-light);
+    /* box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4); */
+}
+
+
+
+
+
+
+
+/* .chart-container:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.chart-wide {
+    grid-column: 1 / -1;
+}
+
+.chart-container h3 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+    font-weight: 600;
+}
+
+.chart-container canvas {
+    max-height: 400px;
+} */
+
+/* Cards por Família */
+.family-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+}
+
+.family-card {
+    /* background: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px); */
+    transition: all 0.3s ease;
+    padding: 25px;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 .1875rem .4375rem 0 rgba(0, 0, 0, .13), 0 .0625rem .125rem 0 rgba(0, 0, 0, .11);
+
+}
+
+.family-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.family-card h4 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: 600;
+    border-bottom: 2px solid var(--background-blue);
+    padding-bottom: 10px;
+}
+
+.family-values {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.value-item {
+    flex: 1;
+    text-align: center;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.value-gasto {
+    background: linear-gradient(135deg, #ff3939, var(--accent-red));
+    color: white;
+}
+
+.value-previsto {
+    background: linear-gradient(135deg, var(--color-border), var(--background-blue));
+    color: white;
+}
+
+.value-item span {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    opacity: 0.9;
+}
+
+.value-item strong {
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+/* Estilos para a seção de tabela */
+
+table {
+    border-collapse: separate;
+    text-indent: initial;
+    border-spacing: 2px;
+}
+
+.modern-table td {
+    color: var(--white);
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.table-section {
+    margin-bottom: 3rem;
+}
+
+.table-container {
+    box-shadow: var(--shadow-lg);
+    background: var(--gray-900);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--gray-200);
+    overflow: hidden;
+}
+
+.table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--gray-200);
+    /* background: var(--gray-50); */
+}
+
+.table-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.table-info p {
+    color: var(--gray-100);
+    font-weight: 500;
+    margin: 0px;
+}
+
+.table-info i {
+    color: var(--info);
+}
+
+.table-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.table-btn {
+    width: 2rem;
+    height: 2rem;
+    color: var(--gray-600);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+    background: var(--gray-200);
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.modern-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    display: table-header-group;
+    vertical-align: middle;
+    unicode-bidi: isolate;
+    border-color: inherit;
+}
+
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    unicode-bidi: isolate;
+    border-color: inherit;
+}
+
+.modern-table th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--gray-700);
+    background: var(--gray-100);
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--gray-200);
+    white-space: nowrap;
+    font-size: 0.85rem;
+}
+
+.modern-table th i {
+    margin-right: 0.5rem;
+    color: var(--primary-blue);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+#demandas-sem-pedido-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+#demandas-sem-pedido-table th {
+    background: var(--gray-900);
+    color: var(--gray-100);
+    font-weight: 600;
+    padding: 15px 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+#demandas-sem-pedido-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e1e5e9;
+    vertical-align: top;
+}
+
+#demandas-sem-pedido-table tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.05);
+}
+
+/* #demandas-sem-pedido-table tbody tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.02);
+} */
+
+/* Estilo especial para a coluna de dias sem pedido */
+#demandas-sem-pedido-table .dias-sem-pedido {
+    font-weight: 700;
+    text-align: center;
+    min-width: 80px;
+}
+
+.dias-sem-pedido.critico {
+    background: linear-gradient(135deg, #ff3939, var(--accent-red));
+    color: white;
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+.dias-sem-pedido.alerta {
+    background: linear-gradient(135deg, #ffa500, #ff8c00);
+    color: white;
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+.dias-sem-pedido.normal {
+    background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+    color: white;
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+/* Responsividade para tabela */
+@media (max-width: 768px) {
+    .table-wrapper {
+        font-size: 0.8rem;
+    }
+
+    .chart-container {
+        width: 100%;
+    }
+    
+    #demandas-sem-pedido-table th,
+    #demandas-sem-pedido-table td {
+        padding: 8px 6px;
+    }
+    
+    .table-header {
+        padding: 15px 20px;
+    }
+    
+    .table-header p {
+        font-size: 1rem;
+    }
+}
+
+/* Estilo para cards de família com nova informação */
+.family-card .family-values {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.family-card .family-stats {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.family-card .demandas-sem-valor {
+    background: linear-gradient(135deg, #ff9500, #ff6b00);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.family-card .demandas-sem-valor span {
+    display: block;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+    opacity: 0.9;
+}
+
+.family-card .demandas-sem-valor strong {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .family-card .family-values {
+        grid-template-columns: 1fr;
+    }
+}
+/* Estilo para o card de valor planejado */
+.value-planejado {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+}
+
+/* Ajuste para os cards de família com 3 valores */
+.family-card .family-values {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+/* Responsividade para os novos filtros */
+@media (max-width: 1200px) {
+    .filters-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .family-card .family-values {
+        grid-template-columns: 1fr;
+    }
+    
+    .filters-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Responsividade para tabelas */
+.table-container {
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    background: var(--gray-900);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    min-width: 100%;
+}
+
+.modern-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.modern-table th,
+.modern-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--gray-200);
+    white-space: nowrap;
+}
+
+.modern-table th {
+    background: var(--gray-800);
+    font-weight: 600;
+    color: var(--gray-200);
+}
+
+@media (max-width: 768px) {
+    .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .table-actions {
+        align-self: flex-end;
+    }
+    
+    .modern-table {
+        font-size: 0.75rem;
+    }
+    
+    .modern-table th,
+    .modern-table td {
+        padding: 0.75rem 0.5rem;
+    }
+}
+
+/* Responsividade para cards de família */
+.family-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .family-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+/* Estilos para a tabela de família */
+.family-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.family-table thead th {
+    background: var(--primary-blue);
+    color: var(--white);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 2px solid var(--primary-blue-dark);
+    font-size: 0.85rem;
+}
+
+.family-table tbody tr {
+    border-bottom: 1px solid var(--gray-200);
+    transition: var(--transition-fast);
+}
+
+.family-table tbody tr:hover {
+    background: var(--gray-700);
+}
+
+.family-table tbody td {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+}
+
+.family-table .conta-linha-cell {
+    font-weight: 600;
+    color: var(--gray-200);
+    background: var(--gray-800);
+}
+
+.family-table .numero-conta-cell {
+    /* font-family: 'Courier New', monospace; */
+    color: var(--gray-200);
+    font-size: 0.9rem;
+}
+
+.family-table .valor-cell {
+    text-align: right;
+    font-weight: 500;
+    /* font-family: 'Courier New', monospace; */
+}
+
+.family-table .percent-cell {
+    text-align: center;
+    font-weight: 600;
+}
+
+.family-table .positive-value {
+    color: #00ff51ff;
+}
+
+.family-table .negative-value {
+    color: var(--accent-red);
+}
+
+.family-table tfoot tr {
+    border-top: 3px solid var(--primary-blue);
+    font-weight: 700;
+}
+
+.family-table .total-label,
+.family-table .media-label {
+    font-size: 0.9rem;
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    color: var(--gray-200);
+    background: var(--gray-800);
+
+}
+
+.family-table .total-value,
+.family-table .media-value {
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.family-table .media-row {
+    border-top: 2px solid var(--gray-300);
+}
