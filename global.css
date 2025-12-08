@@ -892,21 +892,11 @@ footer {
     border-color: var(--primary-blue);
 }
 
-.chart-wrapper {
-    position: relative;
-    padding: 1.5rem;
-    height: 400px;
-}
-
 .chart-wrapper canvas {
     width: 100% !important;
     height: 100% !important;
     max-height: 350px;
 }
-
-/* .chart-wide {
-    grid-column: 1 / -1;
-} */
 
 .chart-wide .chart-wrapper {
     height: 450px;
