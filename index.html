@@ -63,7 +63,6 @@
         </div>
     </nav>
     <div class="container">
-        <!-- Header -->
         <section class="hero-section">
             <div class="hero-content">
                 <h1 class="hero-title">
@@ -87,35 +86,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- Cards de Estatísticas Gerais -->
-        <!-- <section class="stats-section">
-            <h2>Estatísticas Gerais</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">📊</div>
-                    <div class="stat-content">
-                        <h3>Total de Demandas</h3>
-                        <p class="stat-number" id="total-demandas">0</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">✅</div>
-                    <div class="stat-content">
-                        <h3>Demandas com Pedido</h3>
-                        <p class="stat-number" id="demandas-com-pedido">0</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">❌</div>
-                    <div class="stat-content">
-                        <h3>Demandas sem Valor</h3>
-                        <p class="stat-number" id="demandas-sem-valor">0</p>
-                    </div>
-                </div>
-            </div>
-        </section> -->
-
         <section class="stats-section">
             <h2 class="section-title">
                 <i class="fas fa-chart-bar"></i>
@@ -166,7 +136,6 @@
             </div>
         </section>
 
-        <!-- Gráficos -->
         <section class="charts-section">
             <h2 class="section-title">
                 <i class="fas fa-chart-pie"></i>
@@ -215,43 +184,9 @@
                         <canvas id="corretiva-preventiva-chart" style="box-sizing: border-box; display: block; height: 336px; width: 358px;" width="448" height="420"></canvas>
                     </div>
                 </div>
-                
-                <!-- <div class="chart-container chart-wide">
-                    <div class="chart-header">
-                        <h3><i class="fas fa-store"></i> Top 15 Filiais por Demandas</h3>
-                        <div class="chart-actions">
-                            <button class="chart-btn" title="Expandir">
-                                <i class="fas fa-expand"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="chart-wrapper">
-                        <canvas id="top-filiais-chart" style="box-sizing: border-box; display: block; height: 336px; width: 1270px;" width="1588" height="420"></canvas>
-                    </div>
-                </div> -->
             </div>
-
-            <!-- <div class="charts-grid">
-                <div class="chart-container">
-                    <h3>Status da Requisição</h3>
-                    <canvas id="nimbi-chart"></canvas>
-                </div>
-                <div class="chart-container">
-                    <h3>Status do Pedido</h3>
-                    <canvas id="status-pedido-chart"></canvas>
-                </div>
-                <div class="chart-container">
-                    <h3>Corretiva vs Preventiva</h3>
-                    <canvas id="corretiva-preventiva-chart"></canvas>
-                </div>
-                <div class="chart-container chart-wide">
-                    <h3>Quantidade de Solicitações por Filial</h3>
-                    <canvas id="top-filiais-chart"></canvas>
-                </div>
-            </div> -->
         </section>
 
-        <!-- Tabela por Família -->
         <section class="family-section">
             <h2 class="section-title">
                 <i class="fas fa-table"></i>
@@ -286,18 +221,13 @@
                             </tr>
                         </thead>
                         <tbody id="family-table-body">
-                            <!-- Linhas serão geradas dinamicamente pelo JavaScript -->
                         </tbody>
                         <tfoot id="family-table-footer">
-                            <!-- Total e média serão gerados dinamicamente -->
                         </tfoot>
                     </table>
                 </div>
             </div>
         </section>
-
-        <!-- Planilha de Demandas sem Pedido -->
-
         <section class="table-section">
             <h2 class="section-title">
                 <i class="fas fa-exclamation-circle"></i>
@@ -336,37 +266,6 @@
                 </div>
             </div>
         </section>
-
-
-
-        <!-- <section class="table-section">
-            <h2>Demandas sem Pedido</h2>
-            <div class="table-container">
-                <div class="table-header">
-                    <p>Demandas que estão sem pedido há mais de 4 dias úteis após a data RC</p>
-                </div>
-                <div class="table-wrapper">
-                    <table id="demandas-sem-pedido-table">
-                        <thead>
-                            <tr>
-                                <th>Encarregado</th>
-                                <th>Filial</th>
-                                <th>SS</th>
-                                <th>Descrição Demanda</th>
-                                <th>Previsão Pedido</th>
-                                <th>Dias sem Pedido</th>
-                            </tr>
-                        </thead>
-                        <tbody id="demandas-sem-pedido-body">
-                            
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section> -->
-
-        
-
         <div class="chart-container chart-wide">
                     <div class="chart-header">
                         <h3><i class="fas fa-store"></i> Status das Requisições por filial</h3>
@@ -381,37 +280,17 @@
                     </div>
                 </div>
 
-        
-
-        <!-- Loading Indicator -->
-        <div id="loading" class="loading">
+            <div id="loading" class="loading">
             <div class="spinner"></div>
             <p>Carregando dados...</p>
         </div>
 
-        <!-- Error Message -->
         <div id="error-message" class="error-message" style="display: none;">
             <p>Erro ao carregar os dados. Verifique se o arquivo dados.json está disponível.</p>
         </div>
     </div>
     <footer class="footer">
-        <!-- <div class="footer-content">
-            <div class="footer-section">
-                <h4>Portal Manutenção</h4>
-                <p>Sistema integrado de gestão de demandas e pedidos</p>
-            </div>
-            <div class="footer-section">
-                <h4>Grupo Pereira</h4>
-                <p>Excelência em varejo e atendimento</p>
-            </div>
-            <div class="footer-section">
-                <h4>Suporte</h4>
-                <p>Entre em contato para dúvidas e sugestões</p>
-                <p>(67) 99139-0635</p>
-            </div>
-        </div> -->
         <div class="footer-bottom">
-            <!-- <p>© 2025 Grupo Pereira. Todos os direitos reservados.</p> -->
             <p>Desenvolvido por Calil Asir Vaz Velozo - PCM SCN</p>
         </div>
     </footer>
