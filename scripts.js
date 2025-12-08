@@ -21,8 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 navbarFilters.classList.toggle('active');
             });
         });
-
-// Mapeamento de famílias para contas/linhas do planejamento com números de conta
 const mapeamentoFamilias = {
     'EMPILHADEIRAS PREVENTIVA': { contas: ['23.07 - Manut. Prev. Empilhadeiras'], numero: '4120100041' },
     'EMPILHADEIRAS CORRETIVA': { contas: ['22.07 - Manutenção Empilhadeiras'], numero: '4120100038' },
@@ -42,7 +40,6 @@ const mapeamentoFamilias = {
     'LOCAÇÃO DE MAQ./ EQUIP.': { contas: ['22.06 - Garantias Loc. de Maq/Equip/Emp'], numero: '4120100023' }
 };
 
-// Mapeamento de TODAS as contas do planejamento.json (para exibir mesmo sem dados)
 const todasAsContas = [
     { conta: '22.01 - Máquinas e Equipamentos', numero: '4120100004', familia: 'MAQUINAS / EQUIPAMENTOS CORRETIVA' },
     { conta: '22.02 - Refrigeração', numero: '4120100006', familia: 'REFRIGERAÇÃO CORRETIVA' },
@@ -75,17 +72,15 @@ function converterValorBrasileiro(valorStr) {
     
     const valorString = String(valorStr).trim();
     
-    // Se já é um número (sem R$ e sem vírgula), retornar diretamente
     if (valorString.replace('.', '').replace('-', '').replace(/\d/g, '') === '') {
         return parseFloat(valorString) || 0;
     }
     
-    // Se tem R$ ou vírgula, é formato brasileiro
     if (valorString.includes('R$') || valorString.includes(',')) {
         const valorLimpo = valorString
             .replace('R$', '')
-            .replace(/\./g, '') // Remove pontos (separadores de milhares)
-            .replace(',', '.') // Substitui vírgula por ponto (separador decimal)
+            .replace(/\./g, '')
+            .replace(',', '.') 
             .trim();
         
         const numero = parseFloat(valorLimpo);
@@ -139,15 +134,10 @@ async function carregarDados() {
         });
         
         dadosFiltrados = [...dadosOriginais];
-        
-        // Aplicar mapeamento customizado de subregionais
-        aplicarMapeamentoSubregional();
-        
+        aplicarMapeamentoSubregional();   
         popularFiltros();
-        atualizarDashboard();
-        
-        validarLojasSubregional();
-        
+        atualizarDashboard();    
+        validarLojasSubregional();      
         mostrarLoading(false);
     } catch (error) {
         console.error('Erro ao carregar dados:', error);
@@ -164,15 +154,11 @@ function mostrarErro(mostrar) {
     errorElement.style.display = mostrar ? 'block' : 'none';
 }
 
-// Função para aplicar mapeamento customizado de subregionais
 function aplicarMapeamentoSubregional() {
-    // Lojas da Subregional Norte (conforme especificado pelo usuário)
     const lojasNorte = [85, 165, 250, 305, 335, 385, 405, 905];
     
-    // Lojas da Subregional Vale (conforme especificado pelo usuário)
     const lojasVale = [115, 135, 190, 195, 225, 255, 270, 295, 310, 325, 375,420, 425, 480, 825];
     
-    // Atualizar o campo SUB no dadosPlanejamento
     dadosPlanejamento.forEach(item => {
         const loja = Number(item.Loja);
         
@@ -181,15 +167,13 @@ function aplicarMapeamentoSubregional() {
         } else if (lojasVale.includes(loja)) {
             item.SUB = 'VALE';
         } else {
-            item.SUB = 'OUTROS';  // Lojas que não pertencem a nenhuma subregional especificada
+            item.SUB = 'OUTROS';  
         }
     });
 }
 
 function popularFiltros() {
-    // Obter filiais únicas do planejamento e mapear 897 para 264
     const filiaisUnicas = [...new Set(dadosPlanejamento.map(item => {
-        // Se a loja for 897, exibir como 264
         return item.Loja 
     }))].sort((a, b) => a - b);
     
@@ -272,21 +256,18 @@ function criarGraficoNimbi() {
         charts.nimbi.destroy();
     }
 
-    // Agrupar quantidades por status
     const statusCount = dadosFiltrados.reduce((acc, item) => {
         const status = item.NIMBI || 'NÃO INFORMADO';
         acc[status] = (acc[status] || 0) + 1;
         return acc;
     }, {});
 
-    // Ordenar do maior para o menor
     const sorted = Object.entries(statusCount).sort((a, b) => b[1] - a[1]);
     const labels = sorted.map(([status]) => status);
     const data = sorted.map(([_, count]) => count);
     const total = data.reduce((a, b) => a + b, 0);
     const porcentagens = data.map(v => ((v / total) * 100).toFixed(1));
 
-    // 🎨 Cores das barras
     const colors = data.map(() => '#00ff51ff');
 
     charts.nimbi = new Chart(ctx, {
@@ -301,18 +282,18 @@ function criarGraficoNimbi() {
             }]
         },
         options: {
-            indexAxis: 'y', // ← barras horizontais
+            indexAxis: 'y', 
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
                 legend: {
                     display: false,
                     labels: {
-                        color: '#ffffff' // 🔹 cor branca para a legenda
+                        color: '#ffffff' 
                     }
                 },
                 tooltip: {
-                    bodyColor: '#ffffff', // 🔹 texto branco no tooltip
+                    bodyColor: '#ffffff', 
                     titleColor: '#ffffff',
                     callbacks: {
                         label: function(context) {
@@ -336,19 +317,19 @@ function criarGraficoNimbi() {
                 },
                 title: {
                     display: false,
-                    color: '#ffffff' // 🔹 se ativar, título será branco
+                    color: '#ffffff' 
                 }
             },
             scales: {
                 x: {
                     beginAtZero: true,
                     ticks: {
-                        color: '#ffffff' // 🔹 números brancos no eixo X
+                        color: '#ffffff' 
                     },
                     // title: {
                     //     display: true,
                     //     text: 'Quantidade',
-                    //     color: '#ffffff' // 🔹 título branco do eixo X
+                    //     color: '#ffffff'
                     // },
                     grid: {
                         drawOnChartArea: false
@@ -356,7 +337,7 @@ function criarGraficoNimbi() {
                 },
                 y: {
                     ticks: {
-                        color: '#ffffff', // 🔹 nomes brancos no eixo Y
+                        color: '#ffffff', 
                         autoSkip: false
                     },
                     title: {
@@ -386,7 +367,6 @@ function criarGraficoStatusPedido() {
     return acc;
   }, {});
 
-  // Ordena do maior para o menor
   const entries = Object.entries(statusCount).sort((a, b) => b[1] - a[1]);
   const labels = entries.map(e => e[0]);
   const data = entries.map(e => e[1]);
@@ -405,7 +385,7 @@ function criarGraficoStatusPedido() {
       }]
     },
     options: {
-      indexAxis: 'y', // ← barras horizontais
+      indexAxis: 'y',
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
@@ -416,9 +396,8 @@ function criarGraficoStatusPedido() {
           color: '#ffffff', // ← texto branco
           font: { size: 16, weight: 'bold' }
         },
-        // 🔹 Tooltip personalizada
         tooltip: {
-          bodyColor: '#ffffff', // ← texto branco no tooltip
+          bodyColor: '#ffffff', 
           titleColor: '#ffffff',
           callbacks: {
             label: context => {
@@ -428,9 +407,8 @@ function criarGraficoStatusPedido() {
             }
           }
         },
-        // 🔹 Labels dentro das barras
         datalabels: {
-          color: '#ffffff', // ← texto branco nas barras
+          color: '#ffffff',
           anchor: 'end',
           align: 'right',
           formatter: (value, ctx) => {
@@ -444,17 +422,17 @@ function criarGraficoStatusPedido() {
         },
         legend: { 
           display: false,
-          labels: { color: '#ffffff' } // ← cor branca se legenda ativada
+          labels: { color: '#ffffff' } 
         }
       },
       scales: {
         x: {
-          ticks: { color: '#ffffff' }, // ← eixo X branco
+          ticks: { color: '#ffffff' },
           title: { color: '#ffffff' },
           grid: { drawOnChartArea: false }
         },
         y: {
-          ticks: { color: '#ffffff' }, // ← eixo Y branco
+          ticks: { color: '#ffffff' }, 
           title: { color: '#ffffff' }
         }
       }
@@ -568,7 +546,7 @@ function criarGraficoCorretivaPreventiva() {
                 }
             }
         },
-        plugins: [ChartDataLabels] // <-- Adicione o plugin aqui
+        plugins: [ChartDataLabels] 
     });
 }
 
@@ -581,7 +559,6 @@ function criarGraficoTopFiliais() {
         charts.topFiliais.destroy();
     }
     
-    // Agrupar demandas por filial e status NIMBI
     const filiaisData = {};
     
     dadosFiltrados.forEach(item => {
@@ -599,18 +576,14 @@ function criarGraficoTopFiliais() {
         filiaisData[filial].nimbiStatus[nimbi] = (filiaisData[filial].nimbiStatus[nimbi] || 0) + 1;
     });
     
-    // Ordenar filiais por total de demandas e pegar top 15
     const sortedFiliais = Object.entries(filiaisData)
         .sort(([, a], [, b]) => b.total - a.total)
         .slice(0, 50);
     
     const labels = sortedFiliais.map(([filial]) => filial);
-    // console.log(total);
     
-    // Status NIMBI principais
     const statusNimbi = ['SIM', 'NÃO', 'COMPOSIÇÃO NIMBI', 'DEVOLVIDO', 'AGUARD.ORÇ', 'AGUARD.CAD. DE MATERIAIS', 'CANCELADO', 'AGUARD.VERBA', 'GARANTIA', 'REPOSIÇÃO', 'AGUARD.APRO', 'CONTRATOS', 'NÃO INFORMADO'];
     
-    // Cores para cada status
     const coresNimbi = {
         'SIM': '#00ff51ff',
         'NÃO': '#ff1f1fff',
@@ -627,7 +600,6 @@ function criarGraficoTopFiliais() {
         'NÃO INFORMADO': '#ced4da'
     };
     
-    // Criar datasets
     const datasets = statusNimbi.map(status => {
         const data = sortedFiliais.map(([filial, info]) => info.nimbiStatus[status] || 0);
         
@@ -663,7 +635,7 @@ function criarGraficoTopFiliais() {
                     }
                 },
                 tooltip: {
-    bodyColor: '#ffffff',  // 🔹 texto branco no tooltip
+    bodyColor: '#ffffff', 
     titleColor: '#ffffff',
     callbacks: {
         label: function(context) {
@@ -672,10 +644,8 @@ function criarGraficoTopFiliais() {
             return `${label}: ${value} demanda${value !== 1 ? 's' : ''}`;
         },
         footer: function(tooltipItems) {
-            // 🔹 Pega o índice da filial (posição no eixo Y)
             const index = tooltipItems[0].dataIndex;
 
-            // 🔹 Soma o total de todos os status (todas as barras) dessa filial
             let total = 0;
             tooltipItems[0].chart.data.datasets.forEach(dataset => {
                 total += dataset.data[index] || 0;
@@ -699,21 +669,21 @@ function criarGraficoTopFiliais() {
                     beginAtZero: true,
                     ticks: {
                         stepSize: 1,
-                        color: '#ffffff' // 🔹 números brancos eixo X
+                        color: '#ffffff'
                     },
                     grid: {
-                        color: 'rgba(255, 255, 255, 0.1)' // 🔹 linhas de grade discretas
+                        color: 'rgba(255, 255, 255, 0.1)'
                     },
                     title: {
                         display: true,
                         text: 'Quantidade de Demandas',
-                        color: '#ffffff' // 🔹 título branco eixo X
+                        color: '#ffffff' 
                     }
                 },
                 y: {
                     stacked: true,
                     ticks: {
-                        color: '#ffffff' // 🔹 nomes das filiais brancos
+                        color: '#ffffff'
                     },
                     grid: {
                         display: false
@@ -739,7 +709,6 @@ function atualizarTabelaFamilia() {
     
     dadosFiltrados.forEach(item => {
         const familia = item.FAMILIA || 'NÃO INFORMADO';
-        // console.log(familias);
         
         const valorDemanda = converterValorBrasileiro(item['VALOR DA DEMANDA']);
         const numeroPedido = item['NUMERO  PEDIDO'];
@@ -768,7 +737,6 @@ function atualizarTabelaFamilia() {
     let totalRealizado = 0;
     let totalPrevisto = 0;
     
-    // Percorrer TODAS as contas (mesmo sem dados)
     todasAsContas.forEach(contaInfo => {
         const row = tableBody.insertRow();
         
@@ -776,10 +744,8 @@ function atualizarTabelaFamilia() {
         const numeroConta = contaInfo.numero;
         const familia = contaInfo.familia;
         
-        // Calcular valor planejado para esta conta buscando diretamente no planejamentoContasRegional.json
         let valorPlanejadoTotal = 0;
         
-        // Buscar o item correspondente no planejamentoContasRegional.json
         const itemPlanejamentoRegional = dadosPlanejamentoRegional.find(item => {
             const itemContaLinha = String(item["Conta/linha"] || "").trim();
             return itemContaLinha === contaLinha;
@@ -791,18 +757,14 @@ function atualizarTabelaFamilia() {
             } else if (subregionalFilter.value === 'VALE') {
                 valorPlanejadoTotal = converterValorBrasileiro(itemPlanejamentoRegional["VALE/FORT"]);
             } else if (filialFilter.value) {
-                // Calcular para filial específica
                 valorPlanejadoTotal = calcularValorPlanejadoFilial(contaLinha, filialFilter.value);
             } else if (bandeiraFilter.value) {
-                // Calcular para bandeira específica
                 valorPlanejadoTotal = calcularValorPlanejadoBandeira(contaLinha, bandeiraFilter.value);
             } else {
-                // Sem filtro: usar TOTAL GERAL
                 valorPlanejadoTotal = converterValorBrasileiro(itemPlanejamentoRegional["TOTAL GERAL"]);
             }
         }
         
-        // Buscar valores realizados e previstos (se existirem)
 	        let demandasSemValor = 0;
         let valorRealizado = 0;
         let valorPrevisto = 0;
@@ -820,19 +782,16 @@ function atualizarTabelaFamilia() {
         totalPlanejado += planejado;
         totalRealizado += valorRealizado;
         totalPrevisto += valorPrevisto;
-	        let totalDemandasSemValor = 0; // Variável para o total no footer
+	        let totalDemandasSemValor = 0; 
         
-        // Célula Conta/Linha
         const cellContaLinha = row.insertCell();
         cellContaLinha.textContent = contaLinha;
         cellContaLinha.classList.add('conta-linha-cell');
         
-        // Célula Número da Conta
         const cellNumeroConta = row.insertCell();
         cellNumeroConta.textContent = numeroConta;
         cellNumeroConta.classList.add('numero-conta-cell');
         
-        // Célula Planejado
         const cellPlanejado = row.insertCell();
         cellPlanejado.textContent = `R$ ${planejado.toLocaleString('pt-BR', {
             minimumFractionDigits: 2,
@@ -840,7 +799,6 @@ function atualizarTabelaFamilia() {
         })}`;
         cellPlanejado.classList.add('valor-cell');
         
-        // Célula Realizado
         const cellRealizado = row.insertCell();
         cellRealizado.textContent = `R$ ${valorRealizado.toLocaleString('pt-BR', {
             minimumFractionDigits: 2,
@@ -848,7 +806,6 @@ function atualizarTabelaFamilia() {
         })}`;
         cellRealizado.classList.add('valor-cell');
         
-        // Célula Previsto
         const cellPrevisto = row.insertCell();
         cellPrevisto.textContent = `R$ ${valorPrevisto.toLocaleString('pt-BR', {
             minimumFractionDigits: 2,
@@ -856,7 +813,6 @@ function atualizarTabelaFamilia() {
         })}`;
         cellPrevisto.classList.add('valor-cell');
         
-        // Célula ΔR$ PxR
         const cellDeltaRS = row.insertCell();
         cellDeltaRS.textContent = `R$ ${deltaRS.toLocaleString('pt-BR', {
             minimumFractionDigits: 2,
@@ -869,7 +825,6 @@ function atualizarTabelaFamilia() {
             cellDeltaRS.classList.add('positive-value');
         }
         
-        // Célula Δ% PxR
 	        const cellDemandasSemValor = row.insertCell();
 	        cellDemandasSemValor.textContent = demandasSemValor;
 	        cellDemandasSemValor.classList.add('valor-cell');
@@ -885,7 +840,6 @@ function atualizarTabelaFamilia() {
         }
     });
     
-    // Adicionar linha de TOTAL
     const totalRow = tableFooter.insertRow();
     totalRow.classList.add('total-row');
     
@@ -937,7 +891,6 @@ function atualizarTabelaFamilia() {
     } else if (totalDeltaRS > 0) {
         totalDeltaRSCell.classList.add('positive-value');
 	        
-	        // Célula Total Demandas Sem Valor
 	    const totalDemandasSemValorCell = totalRow.insertCell();
 	    totalDemandasSemValorCell.textContent = totalDemandasSemValor;
 	    totalDemandasSemValorCell.classList.add('valor-cell', 'total-value', 'sem-valor');
@@ -953,7 +906,6 @@ function atualizarTabelaFamilia() {
         totalDeltaPercCell.classList.add('positive-value');
     }
     
-    // Calcular número de lojas para a média
     if (filialFilter.value) {
         totalLojas = 1;
     } else {
@@ -961,7 +913,6 @@ function atualizarTabelaFamilia() {
         totalLojas = lojasRelevantes.length;
     }
     
-    // Adicionar linha de MÉDIA POR LOJA
     if (totalLojas > 0) {
         const mediaRow = tableFooter.insertRow();
         mediaRow.classList.add('media-row');
@@ -1042,11 +993,9 @@ function obterInfoLoja(filial) {
     };
 }
 
-// NOVA FUNÇÃO: Calcular valor planejado para uma filial específica
 function calcularValorPlanejadoFilial(contaLinha, filialSelecionada) {
     let valorTotal = 0;
     
-    // Buscar no planejamento.json pela filial específica e conta/linha
     const planejamentoItens = dadosPlanejamento.filter(item => 
         Number(item.Loja) === Number(filialSelecionada) && 
         item['Conta/linha'] === contaLinha
@@ -1061,11 +1010,9 @@ function calcularValorPlanejadoFilial(contaLinha, filialSelecionada) {
     return valorTotal;
 }
 
-// NOVA FUNÇÃO: Calcular valor planejado para uma bandeira específica
 function calcularValorPlanejadoBandeira(contaLinha, bandeiraFiltro) {
     let valorTotal = 0;
     
-    // Buscar no planejamento.json apenas as lojas da bandeira selecionada
     const planejamentoItens = dadosPlanejamento.filter(item => 
         item.BANDEIRA === bandeiraFiltro && 
         item['Conta/linha'] === contaLinha
@@ -1080,7 +1027,6 @@ function calcularValorPlanejadoBandeira(contaLinha, bandeiraFiltro) {
     return valorTotal;
 }
 
-// FUNÇÃO MODIFICADA: Calcular valor planejado regional (mantida para compatibilidade)
 function calcularValorPlanejadoRegional(familiaBase, subregionalFilterValue) {
     const mapeamento = mapeamentoFamilias[familiaBase];
     if (!mapeamento || !mapeamento.contas) {
@@ -1090,13 +1036,11 @@ function calcularValorPlanejadoRegional(familiaBase, subregionalFilterValue) {
     let valorTotal = 0;
 
     mapeamento.contas.forEach(contaLinha => {
-        // Extrair o código numérico da conta para busca mais robusta
         const codigoContaMatch = contaLinha.match(/(\d{2}\.\d{2})/);
         const codigoConta = codigoContaMatch ? codigoContaMatch[1] : null;
 
         const itemPlanejamentoRegional = dadosPlanejamentoRegional.find(item => {
             const itemContaLinha = String(item["Conta/linha"] || "").trim();
-            // Normalizar e buscar pelo código numérico
             const itemCodigoContaMatch = itemContaLinha.match(/(\d{2}\.\d{2})/);
             const itemCodigoConta = itemCodigoContaMatch ? itemCodigoContaMatch[1] : null;
             
@@ -1119,7 +1063,6 @@ function calcularValorPlanejadoRegional(familiaBase, subregionalFilterValue) {
 function formatarDataBR(dataStr) {
     if (!dataStr || typeof dataStr !== "string") return "";
 
-    // Se for DD/MM/YYYY → já retorna formatada
     if (dataStr.includes("/")) {
         const partes = dataStr.split("/");
         if (partes.length === 3) {
@@ -1131,7 +1074,6 @@ function formatarDataBR(dataStr) {
         return "";
     }
 
-    // Se for ISO (YYYY-MM-DD)
     const date = new Date(dataStr);
     if (isNaN(date.getTime())) return "";
 
@@ -1150,12 +1092,11 @@ function converterDataBR(dataStr) {
     if (partes.length !== 3) return null;
 
     const dia = parseInt(partes[0], 10);
-    const mes = parseInt(partes[1], 10) - 1; // JS usa meses de 0 a 11
+    const mes = parseInt(partes[1], 10) - 1; 
     const ano = parseInt(partes[2], 10);
 
     const data = new Date(ano, mes, dia);
 
-    // Verificação: se a data criada não bate com os valores, é invalida
     if (data.getFullYear() !== ano || data.getMonth() !== mes || data.getDate() !== dia) {
         return null;
     }
@@ -1244,7 +1185,7 @@ function validarLojasSubregional() {
 }
 
 document.querySelector(".table-btn[title=\"Atualizar\"]").addEventListener("click", function() {
-    carregarDados(); // Ou atualizarDashboard();
+    carregarDados(); 
 });
 
 document.querySelector(".table-btn[title=\"Exportar\"]").addEventListener("click", function() {
@@ -1267,13 +1208,11 @@ document.querySelector(".table-btn[title=\"Exportar\"]").addEventListener("click
     link.click();
     document.body.removeChild(link);
 });
-// Event listeners para a tabela de família
 document.getElementById("refresh-family-table").addEventListener("click", function() {
     atualizarTabelaFamilia();
 });
 
 document.getElementById("export-family-table").addEventListener("click", function() {
-    // Lógica para exportar dados da tabela de família para CSV
     let csvContent = "data:text/csv;charset=utf-8,";
     const rows = document.querySelectorAll("#family-table tr");
     rows.forEach(function(row) {
@@ -1294,7 +1233,6 @@ document.getElementById("export-family-table").addEventListener("click", functio
 });
 
 document.getElementById("export-demandas-sem-pedido-table").addEventListener("click", function() {
-    // Lógica para exportar dados da tabela de demandas sem pedido
     let csvContent = "data:text/csv;charset=utf-8,";
     const rows = document.querySelectorAll("#demandas-sem-pedido-table tr");
     rows.forEach(function(row) {
