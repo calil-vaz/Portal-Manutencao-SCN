@@ -471,10 +471,11 @@ function criarGraficoCorretivaPreventiva() {
 
     const valores = dadosFiltrados.reduce((acc, item) => {
         const familia = String(item.FAMILIA || '').toUpperCase();
+        const statusPedido = String(item['STATUS PEDIDO']).toUpperCase();
         const valor = converterValorBrasileiro(item['VALOR DA DEMANDA']);
-        const numeroPedido = String(item['NUMERO  PEDIDO'] || '').trim();
+        const numeroPedido = String(item['NUMERO  PEDIDO'] || '').trim();        
 
-        if (valor > 0 && numeroPedido !== '') {
+        if (valor > 0 && numeroPedido !== '' || statusPedido == 'EM APROVAÇÃO' || statusPedido == 'PEDIDO ACEITO' || statusPedido == 'PENDENTE DE ACEITE') {
             if (familia.includes('CORRETIVA')) {
                 acc.corretiva += valor;
             } else if (familia.includes('PREVENTIVA')) {
