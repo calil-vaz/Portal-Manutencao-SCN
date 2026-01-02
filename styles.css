@@ -37,108 +37,7 @@
 .btn-clear:hover {
     transform: translateY(-2px);
     background: var(--accent-red-light);
-    /* box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4); */
 }
-
-
-
-
-
-
-
-/* .chart-container:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-}
-
-.chart-wide {
-    grid-column: 1 / -1;
-}
-
-.chart-container h3 {
-    font-size: 1.3rem;
-    margin-bottom: 20px;
-    color: #333;
-    text-align: center;
-    font-weight: 600;
-}
-
-.chart-container canvas {
-    max-height: 400px;
-} */
-
-/* Cards por Família */
-.family-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 25px;
-}
-
-.family-card {
-    /* background: rgba(255, 255, 255, 0.95);
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px); */
-    transition: all 0.3s ease;
-    padding: 25px;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #000;
-    box-shadow: 0 .1875rem .4375rem 0 rgba(0, 0, 0, .13), 0 .0625rem .125rem 0 rgba(0, 0, 0, .11);
-
-}
-
-.family-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-}
-
-.family-card h4 {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-    color: #333;
-    font-weight: 600;
-    border-bottom: 2px solid var(--background-blue);
-    padding-bottom: 10px;
-}
-
-.family-values {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-}
-
-.value-item {
-    flex: 1;
-    text-align: center;
-    padding: 15px;
-    border-radius: 10px;
-}
-
-.value-gasto {
-    background: linear-gradient(135deg, #ff3939, var(--accent-red));
-    color: white;
-}
-
-.value-previsto {
-    background: linear-gradient(135deg, var(--color-border), var(--background-blue));
-    color: white;
-}
-
-.value-item span {
-    display: block;
-    font-size: 0.9rem;
-    margin-bottom: 5px;
-    opacity: 0.9;
-}
-
-.value-item strong {
-    font-size: 1.3rem;
-    font-weight: 700;
-}
-
-/* Estilos para a seção de tabela */
 
 table {
     border-collapse: separate;
@@ -170,7 +69,6 @@ table {
     justify-content: space-between;
     padding: 1.5rem 2rem;
     border-bottom: 1px solid var(--gray-200);
-    /* background: var(--gray-50); */
 }
 
 .table-info {
@@ -284,11 +182,6 @@ tr {
     background-color: rgba(102, 126, 234, 0.05);
 }
 
-/* #demandas-sem-pedido-table tbody tr:nth-child(even) {
-    background-color: rgba(0, 0, 0, 0.02);
-} */
-
-/* Estilo especial para a coluna de dias sem pedido */
 #demandas-sem-pedido-table .dias-sem-pedido {
     font-weight: 700;
     text-align: center;
@@ -316,7 +209,6 @@ tr {
     padding: 8px 12px;
 }
 
-/* Responsividade para tabela */
 @media (max-width: 768px) {
     .table-wrapper {
         font-size: 0.8rem;
@@ -340,79 +232,6 @@ tr {
     }
 }
 
-/* Estilo para cards de família com nova informação */
-.family-card .family-values {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-bottom: 15px;
-}
-
-.family-card .family-stats {
-    display: flex;
-    justify-content: center;
-    margin-top: 15px;
-}
-
-.family-card .demandas-sem-valor {
-    background: linear-gradient(135deg, #ff9500, #ff6b00);
-    color: white;
-    padding: 10px 15px;
-    border-radius: 8px;
-    text-align: center;
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-.family-card .demandas-sem-valor span {
-    display: block;
-    font-size: 0.8rem;
-    margin-bottom: 5px;
-    opacity: 0.9;
-}
-
-.family-card .demandas-sem-valor strong {
-    font-size: 1.2rem;
-    font-weight: 700;
-}
-
-@media (max-width: 768px) {
-    .family-card .family-values {
-        grid-template-columns: 1fr;
-    }
-}
-/* Estilo para o card de valor planejado */
-.value-planejado {
-    background: linear-gradient(135deg, #28a745, #20c997);
-    color: white;
-}
-
-/* Ajuste para os cards de família com 3 valores */
-.family-card .family-values {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-bottom: 15px;
-}
-
-/* Responsividade para os novos filtros */
-@media (max-width: 1200px) {
-    .filters-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .family-card .family-values {
-        grid-template-columns: 1fr;
-    }
-    
-    .filters-container {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Responsividade para tabelas */
 .table-container {
     overflow-x: auto;
     border-radius: var(--radius-lg);
@@ -464,104 +283,4 @@ tr {
     .modern-table td {
         padding: 0.75rem 0.5rem;
     }
-}
-
-/* Responsividade para cards de família */
-.family-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-}
-
-@media (max-width: 768px) {
-    .family-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-}
-
-/* Estilos para a tabela de família */
-.family-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.family-table thead th {
-    background: var(--primary-blue);
-    color: var(--white);
-    font-weight: 600;
-    text-align: left;
-    padding: 0.5rem 0.75rem;
-    border-bottom: 2px solid var(--primary-blue-dark);
-    font-size: 0.85rem;
-}
-
-.family-table tbody tr {
-    border-bottom: 1px solid var(--gray-200);
-    transition: var(--transition-fast);
-}
-
-.family-table tbody tr:hover {
-    background: var(--gray-700);
-}
-
-.family-table tbody td {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.85rem;
-}
-
-.family-table .conta-linha-cell {
-    font-weight: 600;
-    color: var(--gray-200);
-    background: var(--gray-800);
-}
-
-.family-table .numero-conta-cell {
-    /* font-family: 'Courier New', monospace; */
-    color: var(--gray-200);
-    font-size: 0.9rem;
-}
-
-.family-table .valor-cell {
-    text-align: right;
-    font-weight: 500;
-    /* font-family: 'Courier New', monospace; */
-}
-
-.family-table .percent-cell {
-    text-align: center;
-    font-weight: 600;
-}
-
-.family-table .positive-value {
-    color: #00ff51ff;
-}
-
-.family-table .negative-value {
-    color: var(--accent-red);
-}
-
-.family-table tfoot tr {
-    border-top: 3px solid var(--primary-blue);
-    font-weight: 700;
-}
-
-.family-table .total-label,
-.family-table .media-label {
-    font-size: 0.9rem;
-    text-align: left;
-    padding: 0.5rem 0.75rem;
-    color: var(--gray-200);
-    background: var(--gray-800);
-
-}
-
-.family-table .total-value,
-.family-table .media-value {
-    font-weight: 700;
-    font-size: 0.85rem;
-}
-
-.family-table .media-row {
-    border-top: 2px solid var(--gray-300);
 }
