@@ -13,14 +13,33 @@ const bandeiraFilter = document.getElementById('bandeira-filter');
 const clearFiltersBtn = document.getElementById('clear-filters');
 const dadosDemandas = 'https://opensheet.elk.sh/1aRdOpxR8xHT9nJ1mWHhVGeFOVRFJvgU8cQEdGw_A5Nc/Sc'
 
-document.addEventListener('DOMContentLoaded', function() {
-            const navbarToggle = document.getElementById('navbar-toggle');
-            const navbarFilters = document.querySelector('.navbar-filters');
+document.addEventListener('DOMContentLoaded', function () {
+    const navbarToggle = document.getElementById('navbar-toggle');
+    const navbarFilters = document.querySelector('.navbar-filters');
+    const filterSelects = navbarFilters.querySelectorAll('select');
 
-            navbarToggle.addEventListener('click', function() {
-                navbarFilters.classList.toggle('active');
-            });
+    navbarToggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        navbarFilters.classList.toggle('active');
+    });
+
+    filterSelects.forEach(select => {
+        select.addEventListener('change', () => {
+            navbarFilters.classList.remove('active');
         });
+    });
+
+    document.addEventListener('click', function (event) {
+        const clickedOutside =
+            !navbarFilters.contains(event.target) &&
+            !navbarToggle.contains(event.target);
+
+        if (clickedOutside) {
+            navbarFilters.classList.remove('active');
+        }
+    });
+});
+
 const mapeamentoFamilias = {
     'EMPILHADEIRAS PREVENTIVA': { contas: ['23.07 - Manut. Prev. Empilhadeiras'], numero: '4120100041' },
     'EMPILHADEIRAS CORRETIVA': { contas: ['22.07 - Manutenção Empilhadeiras'], numero: '4120100038' },
