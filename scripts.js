@@ -251,7 +251,7 @@ function atualizarEstatisticasGerais() {
     document.getElementById('total-demandas').textContent = totalDemandas.toLocaleString('pt-BR');
 
     const demandasComPedido = dadosFiltrados.filter(item => 
-        item['STATUS PEDIDO'] === 'PEDIDO ACEITO'
+        item['STATUS PEDIDO'] === 'Aprovado - Aceito'
     ).length;
     document.getElementById('demandas-com-pedido').textContent = demandasComPedido.toLocaleString('pt-BR');
 
@@ -475,7 +475,7 @@ function criarGraficoCorretivaPreventiva() {
         const valor = converterValorBrasileiro(item['VALOR DA DEMANDA']);
         const numeroPedido = String(item['NUMERO  PEDIDO'] || '').trim();        
 
-        if (valor > 0 && numeroPedido !== '' || statusPedido == 'EM APROVAÇÃO' || statusPedido == 'PEDIDO ACEITO' || statusPedido == 'PENDENTE DE ACEITE') {
+        if (valor > 0 && numeroPedido !== '' || statusPedido == 'Em Aprovação' || statusPedido == 'Aprovado - Aceito' || statusPedido == 'Pendente de Aceite') {
             if (familia.includes('CORRETIVA')) {
                 acc.corretiva += valor;
             } else if (familia.includes('PREVENTIVA')) {
@@ -602,20 +602,20 @@ function criarGraficoTopFiliais() {
     
     const labels = sortedFiliais.map(([filial]) => filial);
     
-    const statusNimbi = ['SIM', 'NÃO', 'COMPOSIÇÃO NIMBI', 'DEVOLVIDO', 'AGUARD.ORÇ', 'AGUARD.CAD. DE MATERIAIS', 'CANCELADO', 'AGUARD.VERBA', 'GARANTIA', 'REPOSIÇÃO', 'AGUARD.APRO', 'CONTRATOS', 'NÃO INFORMADO'];
+    const statusNimbi = ['SIM', 'NÃO', 'Em Composição', 'Devolvido', 'AGUARD.ORÇ', 'AGUARD.CAD. DE MATERIAIS', 'Cancelado', 'AGUARD.VERBA', 'GARANTIA', 'REPOSIÇÃO', 'Em Aprovação', 'CONTRATOS', 'NÃO INFORMADO'];
     
     const coresNimbi = {
         'SIM': '#00ff51ff',
         'NÃO': '#ff1f1fff',
-        'COMPOSIÇÃO NIMBI': '#ff00ddff',
-        'DEVOLVIDO': '#fffe00',
+        'Em Composição': '#ff00ddff',
+        'Devolvido': '#fffe00',
         'AGUARD.ORÇ': '#00e1ffff',
         'AGUARD.CAD. DE MATERIAIS': '#fd7e14',
-        'CANCELADO': '#ff0062ff',
+        'Cancelado': '#ff0062ff',
         'AGUARD.VERBA': '#e83e8c',
         'GARANTIA': '#20c997',
         'REPOSIÇÃO': '#6610f2',
-        'AGUARD.APRO': '#007bff',
+        'Em Aprovação': '#007bff',
         'CONTRATOS': '#6f42c1',
         'NÃO INFORMADO': '#ced4da'
     };
@@ -1150,7 +1150,7 @@ function atualizarPlanilhaDemandasSemPedido() {
         const statusRC = String(item['NIMBI'] || '').trim().toUpperCase();
         const dataRC = item['ÚLTIMO ENVIO RC'];
         
-        if (statusPedido === 'SEM PEDIDO' || statusPedido === 'DEVOLVIDO' || statusPedido === 'COMPOSIÇÃO' && dataRC && statusRC === 'SIM') {
+        if (statusPedido === 'SEM PEDIDO' || statusPedido === 'Devolvido' || statusPedido === 'COMPOSIÇÃO' && dataRC && statusRC === 'SIM') {
             const dataRCDate = converterDataBR(dataRC);
             
             if (dataRCDate) {
