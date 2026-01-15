@@ -1022,8 +1022,8 @@ function calcularValorPlanejadoFilial(contaLinha, filialSelecionada) {
     );
     
     planejamentoItens.forEach(item => {
-        if (item.Nov) {
-            valorTotal += converterValorBrasileiro(item.Nov);
+        if (item.Jan) {
+            valorTotal += converterValorBrasileiro(item.Jan);
         }
     });
     
@@ -1039,8 +1039,8 @@ function calcularValorPlanejadoBandeira(contaLinha, bandeiraFiltro) {
     );
     
     planejamentoItens.forEach(item => {
-        if (item.Nov) {
-            valorTotal += converterValorBrasileiro(item.Nov);
+        if (item.Jan) {
+            valorTotal += converterValorBrasileiro(item.Jan);
         }
     });
     
