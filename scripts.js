@@ -11,7 +11,18 @@ const encarregadoFilter = document.getElementById('encarregado-filter');
 const subregionalFilter = document.getElementById('subregional-filter');
 const bandeiraFilter = document.getElementById('bandeira-filter');
 const clearFiltersBtn = document.getElementById('clear-filters');
-const dadosDemandas = 'https://opensheet.elk.sh/1aRdOpxR8xHT9nJ1mWHhVGeFOVRFJvgU8cQEdGw_A5Nc/Sc'
+const dadosDemandas = 'https://opensheet.elk.sh/1aRdOpxR8xHT9nJ1mWHhVGeFOVRFJvgU8cQEdGw_A5Nc/Sc';
+
+fetch("https://script.google.com/macros/s/AKfycbxRU31iZkSqq9FKHmsYez9ODX_TY97MEFX5elZaX4CkaKPVCvMXIEN21EXSm27z_XJ-Vw/exec")
+  .then(res => res.json())
+  .then(data => {
+    // console.log("Dados recebidos:", data);
+
+    // Exemplo:
+    // console.log(data["LOJA 295"]);
+  })
+  .catch(err => console.error(err));
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const navbarToggle = document.getElementById('navbar-toggle');
@@ -39,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
 
 const mapeamentoFamilias = {
     'EMPILHADEIRAS PREVENTIVA': { contas: ['23.07 - Manut. Prev. Empilhadeiras'], numero: '4120100041' },
@@ -98,8 +110,8 @@ function converterValorBrasileiro(valorStr) {
     if (valorString.includes('R$') || valorString.includes(',')) {
         const valorLimpo = valorString
             .replace('R$', '')
-            .replace(/\./g, '')
-            .replace(',', '.') 
+            .replace(/\./g, '') 
+            .replace(',', '.')
             .trim();
         
         const numero = parseFloat(valorLimpo);
@@ -153,10 +165,14 @@ async function carregarDados() {
         });
         
         dadosFiltrados = [...dadosOriginais];
-        aplicarMapeamentoSubregional();   
+        
+        aplicarMapeamentoSubregional();
+        
         popularFiltros();
-        atualizarDashboard();    
-        validarLojasSubregional();      
+        atualizarDashboard();
+        
+        validarLojasSubregional();
+        
         mostrarLoading(false);
     } catch (error) {
         console.error('Erro ao carregar dados:', error);
@@ -174,10 +190,10 @@ function mostrarErro(mostrar) {
 }
 
 function aplicarMapeamentoSubregional() {
-    const lojasNorte = [85, 165, 250, 305, 335, 385, 405, 905];
+    const lojasNorte = [85, 165, 250, 305, 335, 385, 395, 405, 905];
     
-    const lojasVale = [115, 135, 190, 195, 225, 255, 270, 295, 310, 325, 375,420, 425, 480, 825];
-    
+    const lojasVale = [115, 135, 190, 195, 225, 255, 270, 295, 310, 325, 375, 420, 425, 480, 825];
+
     dadosPlanejamento.forEach(item => {
         const loja = Number(item.Loja);
         
@@ -185,8 +201,9 @@ function aplicarMapeamentoSubregional() {
             item.SUB = 'NORTE';
         } else if (lojasVale.includes(loja)) {
             item.SUB = 'VALE';
-        } else {
-            item.SUB = 'OUTROS';  
+         } 
+        else {
+            item.SUB = 'OUTROS'; 
         }
     });
 }
@@ -216,13 +233,13 @@ function popularFiltros() {
 
 function aplicarFiltros() {
     dadosFiltrados = dadosOriginais.filter(item => {
-        const filialMatch = !filialFilter.value || item.FILIAL.toString() === filialFilter.value;
+        const filialMatch = !filialFilter.value || item.LOJA.toString() === filialFilter.value;
         const encarregadoMatch = !encarregadoFilter.value || item.ENCARREGADO === encarregadoFilter.value;
         
-        const infoLoja = obterInfoLoja(item.FILIAL);
+        const infoLoja = obterInfoLoja(item.LOJA);
         const subregionalMatch = !subregionalFilter.value || infoLoja.subregional === subregionalFilter.value;
+        
         const bandeiraMatch = !bandeiraFilter.value || infoLoja.bandeira === bandeiraFilter.value;
-        console.log(dadosFiltrados);
         
         return filialMatch && encarregadoMatch && subregionalMatch && bandeiraMatch;
     });
@@ -276,7 +293,7 @@ function criarGraficoNimbi() {
     }
 
     const statusCount = dadosFiltrados.reduce((acc, item) => {
-        const status = item.NIMBI || 'NÃO INFORMADO';
+        const status = item.NIMBI || 'Não Informado';
         acc[status] = (acc[status] || 0) + 1;
         return acc;
     }, {});
@@ -312,7 +329,7 @@ function criarGraficoNimbi() {
                     }
                 },
                 tooltip: {
-                    bodyColor: '#ffffff', 
+                    bodyColor: '#ffffff',
                     titleColor: '#ffffff',
                     callbacks: {
                         label: function(context) {
@@ -323,7 +340,7 @@ function criarGraficoNimbi() {
                     }
                 },
                 datalabels: {
-                    color: '#ffffff', // 🔹 cor branca nos rótulos das barras
+                    color: '#ffffff', 
                     anchor: 'end',
                     align: 'right',
                     formatter: (value, context) => {
@@ -336,7 +353,7 @@ function criarGraficoNimbi() {
                 },
                 title: {
                     display: false,
-                    color: '#ffffff' 
+                    color: '#ffffff'
                 }
             },
             scales: {
@@ -345,11 +362,6 @@ function criarGraficoNimbi() {
                     ticks: {
                         color: '#ffffff' 
                     },
-                    // title: {
-                    //     display: true,
-                    //     text: 'Quantidade',
-                    //     color: '#ffffff'
-                    // },
                     grid: {
                         drawOnChartArea: false
                     }
@@ -379,9 +391,8 @@ function criarGraficoStatusPedido() {
     charts.statusPedido.destroy();
   }
 
-  // Contagem dos status
   const statusCount = dadosFiltrados.reduce((acc, item) => {
-    const status = item['STATUS PEDIDO'] || 'NÃO INFORMADO';
+    const status = item['STATUS PEDIDO'] || 'Não Informado';
     acc[status] = (acc[status] || 0) + 1;
     return acc;
   }, {});
@@ -390,10 +401,8 @@ function criarGraficoStatusPedido() {
   const labels = entries.map(e => e[0]);
   const data = entries.map(e => e[1]);
 
-  // Cores das barras
   const colors = labels.map(() => '#fffe00');
 
-  // Criação do gráfico
   charts.statusPedido = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -408,13 +417,6 @@ function criarGraficoStatusPedido() {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        // 🔹 Título
-        title: {
-          display: true,
-          text: 'Distribuição por Status do Pedido',
-          color: '#ffffff', // ← texto branco
-          font: { size: 16, weight: 'bold' }
-        },
         tooltip: {
           bodyColor: '#ffffff', 
           titleColor: '#ffffff',
@@ -427,7 +429,7 @@ function criarGraficoStatusPedido() {
           }
         },
         datalabels: {
-          color: '#ffffff',
+          color: '#ffffff', 
           anchor: 'end',
           align: 'right',
           formatter: (value, ctx) => {
@@ -446,7 +448,7 @@ function criarGraficoStatusPedido() {
       },
       scales: {
         x: {
-          ticks: { color: '#ffffff' },
+          ticks: { color: '#ffffff' }, 
           title: { color: '#ffffff' },
           grid: { drawOnChartArea: false }
         },
@@ -475,7 +477,7 @@ function criarGraficoCorretivaPreventiva() {
         const valor = converterValorBrasileiro(item['VALOR DA DEMANDA']);
         const numeroPedido = String(item['NUMERO  PEDIDO'] || '').trim();        
 
-        if (valor > 0 && numeroPedido !== '' || statusPedido == 'Em Aprovação' || statusPedido == 'Aprovado - Aceito' || statusPedido == 'Pendente de Aceite') {
+        if (valor > 0 && numeroPedido !== '' || statusPedido == 'Em Aprovação' || statusPedido == 'Aprovado - Aceito' || statusPedido == 'Aprovado - Pendente de Aceite') {
             if (familia.includes('CORRETIVA')) {
                 acc.corretiva += valor;
             } else if (familia.includes('PREVENTIVA')) {
@@ -582,8 +584,8 @@ function criarGraficoTopFiliais() {
     const filiaisData = {};
     
     dadosFiltrados.forEach(item => {
-        const filial = `Filial ${item.FILIAL}`;
-        const nimbi = String(item.NIMBI || 'NÃO INFORMADO').trim().toUpperCase();
+        const filial = `Loja ${item.LOJA}`;
+        const nimbi = String(item.NIMBI || 'Não Informado').trim();
         
         if (!filiaisData[filial]) {
             filiaisData[filial] = {
@@ -601,30 +603,30 @@ function criarGraficoTopFiliais() {
         .slice(0, 50);
     
     const labels = sortedFiliais.map(([filial]) => filial);
-    
-    const statusNimbi = ['SIM', 'NÃO', 'Em Composição', 'Devolvido', 'AGUARD.ORÇ', 'AGUARD.CAD. DE MATERIAIS', 'Cancelado', 'AGUARD.VERBA', 'GARANTIA', 'REPOSIÇÃO', 'Em Aprovação', 'CONTRATOS', 'NÃO INFORMADO'];
+
+    const statusNimbi = ['Aprovado', 'Não', 'Em composição', 'Devolvido', 'Aguard. Orçamento', 'Aguard. Cad. Materiais', 'Cancelado', 'Aguard. Verba', 'Garantia', 'Reposição', 'Em Aprovação', 'Contratos', 'Não Informado'];
     
     const coresNimbi = {
-        'SIM': '#00ff51ff',
-        'NÃO': '#ff1f1fff',
+        'Aprovado': '#00ff51ff',
+        'Devolvido': '#ff1f1fff',
         'Em Composição': '#ff00ddff',
-        'Devolvido': '#fffe00',
-        'AGUARD.ORÇ': '#00e1ffff',
-        'AGUARD.CAD. DE MATERIAIS': '#fd7e14',
+        'Em Aprovação': '#fffe00',
+        'Aguard. Orçamento': '#00e1ffff',
+        'Aguard. Cad. Materiais': '#fd7e14',
         'Cancelado': '#ff0062ff',
-        'AGUARD.VERBA': '#e83e8c',
-        'GARANTIA': '#20c997',
-        'REPOSIÇÃO': '#6610f2',
-        'Em Aprovação': '#007bff',
-        'CONTRATOS': '#6f42c1',
-        'NÃO INFORMADO': '#ced4da'
+        'Aguard. Verba': '#e83e8c',
+        'Garantia': '#6900ae',
+        'Reposição': '#6610f2',
+        'Não': '#ffdba5',
+        'Contratos': '#6f42c1',
+        'Não Informado': '#ced4da'
     };
     
     const datasets = statusNimbi.map(status => {
         const data = sortedFiliais.map(([filial, info]) => info.nimbiStatus[status] || 0);
         
         return {
-            label: status === '' ? 'NÃO INFORMADO' : status,
+            label: status === '' ? 'Não Informado' : status,
             data: data,
             backgroundColor: coresNimbi[status] || '#6c757d',
             borderWidth: 0
@@ -646,7 +648,7 @@ function criarGraficoTopFiliais() {
                     display: true,
                     position: 'bottom',
                     labels: {
-                        color: '#ffffff', // 🔹 legenda branca
+                        color: '#ffffff', 
                         boxWidth: 12,
                         padding: 8,
                         font: {
@@ -655,7 +657,7 @@ function criarGraficoTopFiliais() {
                     }
                 },
                 tooltip: {
-    bodyColor: '#ffffff', 
+    bodyColor: '#ffffff',  
     titleColor: '#ffffff',
     callbacks: {
         label: function(context) {
@@ -676,12 +678,6 @@ function criarGraficoTopFiliais() {
     }
 }
 ,
-                // title: {
-                //     display: true,
-                //     text: 'Status das Requisições por filial',
-                //     color: '#ffffff', // 🔹 título branco
-                //     font: { size: 16, weight: 'bold' }
-                // }
             },
             scales: {
                 x: {
@@ -689,10 +685,10 @@ function criarGraficoTopFiliais() {
                     beginAtZero: true,
                     ticks: {
                         stepSize: 1,
-                        color: '#ffffff'
+                        color: '#ffffff' 
                     },
                     grid: {
-                        color: 'rgba(255, 255, 255, 0.1)'
+                        color: 'rgba(255, 255, 255, 0.1)' 
                     },
                     title: {
                         display: true,
@@ -703,7 +699,7 @@ function criarGraficoTopFiliais() {
                 y: {
                     stacked: true,
                     ticks: {
-                        color: '#ffffff'
+                        color: '#ffffff' 
                     },
                     grid: {
                         display: false
@@ -732,7 +728,7 @@ function atualizarTabelaFamilia() {
         
         const valorDemanda = converterValorBrasileiro(item['VALOR DA DEMANDA']);
         const numeroPedido = item['NUMERO  PEDIDO'];
-        const temPedido = numeroPedido && numeroPedido.toString().trim() !== '' && item['STATUS PEDIDO'] !== 'COMPOSIÇÃO' && item['STATUS PEDIDO'] !== 'SEM PEDIDO';
+        const temPedido = numeroPedido && numeroPedido.toString().trim() !== '' && item['STATUS PEDIDO'] !== 'Em composição' && item['STATUS PEDIDO'] !== 'Sem Pedido';
         
         if (!familias[familia]) {
             familias[familia] = {
@@ -806,50 +802,56 @@ function atualizarTabelaFamilia() {
         
         const cellContaLinha = row.insertCell();
         cellContaLinha.textContent = contaLinha;
-        cellContaLinha.classList.add('conta-linha-cell');
+        // cellContaLinha.classList.add('conta-linha-cell');
         
+        // Célula Número da Conta
         const cellNumeroConta = row.insertCell();
         cellNumeroConta.textContent = numeroConta;
-        cellNumeroConta.classList.add('numero-conta-cell');
+        // cellNumeroConta.classList.add('numero-conta-cell');
         
+        // Célula Planejado
         const cellPlanejado = row.insertCell();
         cellPlanejado.textContent = `R$ ${planejado.toLocaleString('pt-BR', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         })}`;
-        cellPlanejado.classList.add('valor-cell');
+        // cellPlanejado.classList.add('valor-cell');
         
+        // Célula Realizado
         const cellRealizado = row.insertCell();
         cellRealizado.textContent = `R$ ${valorRealizado.toLocaleString('pt-BR', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         })}`;
-        cellRealizado.classList.add('valor-cell');
+        // cellRealizado.classList.add('valor-cell');
         
+        // Célula Previsto
         const cellPrevisto = row.insertCell();
         cellPrevisto.textContent = `R$ ${valorPrevisto.toLocaleString('pt-BR', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         })}`;
-        cellPrevisto.classList.add('valor-cell');
+        // cellPrevisto.classList.add('valor-cell');
         
+        // Célula ΔR$ PxR
         const cellDeltaRS = row.insertCell();
         cellDeltaRS.textContent = `R$ ${deltaRS.toLocaleString('pt-BR', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         })}`;
-        cellDeltaRS.classList.add('valor-cell');
+        // cellDeltaRS.classList.add('valor-cell');
         if (deltaRS < 0) {
             cellDeltaRS.classList.add('negative-value');
         } else if (deltaRS > 0) {
             cellDeltaRS.classList.add('positive-value');
         }
         
+        // Célula Δ% PxR
 	        const cellDemandasSemValor = row.insertCell();
 	        cellDemandasSemValor.textContent = demandasSemValor;
 	        cellDemandasSemValor.classList.add('valor-cell');
 	        
-	        totalDemandasSemValor += demandasSemValor; // Adicionar ao total do footer
+	        totalDemandasSemValor += demandasSemValor; 
         const cellDeltaPerc = row.insertCell();
         cellDeltaPerc.textContent = `${deltaPerc.toFixed(0)}%`;
         cellDeltaPerc.classList.add('percent-cell');
@@ -911,6 +913,7 @@ function atualizarTabelaFamilia() {
     } else if (totalDeltaRS > 0) {
         totalDeltaRSCell.classList.add('positive-value');
 	        
+	        // Célula Total Demandas Sem Valor
 	    const totalDemandasSemValorCell = totalRow.insertCell();
 	    totalDemandasSemValorCell.textContent = totalDemandasSemValor;
 	    totalDemandasSemValorCell.classList.add('valor-cell', 'total-value', 'sem-valor');
@@ -926,6 +929,7 @@ function atualizarTabelaFamilia() {
         totalDeltaPercCell.classList.add('positive-value');
     }
     
+    // Calcular número de lojas para a média
     if (filialFilter.value) {
         totalLojas = 1;
     } else {
@@ -933,6 +937,7 @@ function atualizarTabelaFamilia() {
         totalLojas = lojasRelevantes.length;
     }
     
+    // Adicionar linha de MÉDIA POR LOJA
     if (totalLojas > 0) {
         const mediaRow = tableFooter.insertRow();
         mediaRow.classList.add('media-row');
@@ -1008,14 +1013,16 @@ function obterLojasRelevantesParaFiltro() {
 function obterInfoLoja(filial) {
     const info = dadosPlanejamento.find(item => Number(item.Loja) === Number(filial));
     return {
-        subregional: info ? info.SUB : 'NÃO INFORMADO',
-        bandeira: info ? info.BANDEIRA : 'NÃO INFORMADO'
+        subregional: info ? info.SUB : 'Não Informado',
+        bandeira: info ? info.BANDEIRA : 'Não Informado'
     };
 }
 
+// Calcular valor planejado para uma filial específica
 function calcularValorPlanejadoFilial(contaLinha, filialSelecionada) {
     let valorTotal = 0;
     
+    // Buscar no planejamento.json pela filial específica e conta/linha
     const planejamentoItens = dadosPlanejamento.filter(item => 
         Number(item.Loja) === Number(filialSelecionada) && 
         item['Conta/linha'] === contaLinha
@@ -1030,9 +1037,11 @@ function calcularValorPlanejadoFilial(contaLinha, filialSelecionada) {
     return valorTotal;
 }
 
+// Calcular valor planejado para uma bandeira específica
 function calcularValorPlanejadoBandeira(contaLinha, bandeiraFiltro) {
     let valorTotal = 0;
     
+    // Buscar no planejamento.json apenas as lojas da bandeira selecionada
     const planejamentoItens = dadosPlanejamento.filter(item => 
         item.BANDEIRA === bandeiraFiltro && 
         item['Conta/linha'] === contaLinha
@@ -1047,6 +1056,7 @@ function calcularValorPlanejadoBandeira(contaLinha, bandeiraFiltro) {
     return valorTotal;
 }
 
+// FUNÇÃO MODIFICADA: Calcular valor planejado regional (mantida para compatibilidade)
 function calcularValorPlanejadoRegional(familiaBase, subregionalFilterValue) {
     const mapeamento = mapeamentoFamilias[familiaBase];
     if (!mapeamento || !mapeamento.contas) {
@@ -1072,7 +1082,7 @@ function calcularValorPlanejadoRegional(familiaBase, subregionalFilterValue) {
                 valorTotal += converterValorBrasileiro(itemPlanejamentoRegional["NORTE/FORT"]);
             } else if (subregionalFilterValue === "VALE") {
                 valorTotal += converterValorBrasileiro(itemPlanejamentoRegional["VALE/FORT"]);
-            } else { // Sem filtro de subregional
+            } else { 
                 valorTotal += converterValorBrasileiro(itemPlanejamentoRegional["TOTAL GERAL"]);
             }
         }
@@ -1145,59 +1155,60 @@ function atualizarPlanilhaDemandasSemPedido() {
     const tableBody = document.getElementById('demandas-sem-pedido-body');
     tableBody.innerHTML = '';
 
-    const demandasSemPedido = dadosFiltrados.filter(item => {
-        const statusPedido = String(item['STATUS PEDIDO'] || '').trim().toUpperCase();
-        const statusRC = String(item['NIMBI'] || '').trim().toUpperCase();
-        const dataRC = item['ÚLTIMO ENVIO RC'];
-        
-        if (statusPedido === 'SEM PEDIDO' || statusPedido === 'Devolvido' || statusPedido === 'COMPOSIÇÃO' && dataRC && statusRC === 'SIM') {
-            const dataRCDate = converterDataBR(dataRC);
-            
-            if (dataRCDate) {
-                const hoje = new Date();
-                const diasUteis = calcularDiasUteis(dataRCDate, hoje);
-                return diasUteis > 5;
-            }
-        }
-        return false;
-    }).sort((a, b) => {
-        const dataA = converterDataBR(a['ÚLTIMO ENVIO RC']);
-        const dataB = converterDataBR(b['ÚLTIMO ENVIO RC']);
-        return dataA - dataB;
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    const demandasFiltradas = dadosFiltrados.filter(item => {
+        const statusPedido = String(item['STATUS PEDIDO'] || '').trim();
+        const previsaoPedidoStr = item['PREVISÃO PEDIDO'];
+
+        if (statusPedido !== 'Sem Pedido') return false;
+        if (!previsaoPedidoStr) return false;
+
+        const dataPrevisao = converterDataBR(previsaoPedidoStr);
+        if (!dataPrevisao) return false;
+
+        dataPrevisao.setHours(0, 0, 0, 0);
+
+        // Hoje maior que a previsão = vencido
+        return hoje > dataPrevisao;
     });
-    
-    demandasSemPedido.forEach(item => {
+
+    demandasFiltradas.forEach(item => {
         const row = tableBody.insertRow();
+
         row.insertCell().textContent = item.ENCARREGADO || '';
-        row.insertCell().textContent = item.FILIAL || '';
+        row.insertCell().textContent = item.LOJA || '';
         row.insertCell().textContent = item.SS || '';
+        row.insertCell().textContent = item.OS || '';
         row.insertCell().textContent = item.RC || '';
-        row.insertCell().textContent = item["DESCRIÇÃO DEMANDA"] || "";
-        row.insertCell().textContent = formatarDataBR(item["PREVISÃO PEDIDO"]);
-        
-        const dataRCDate = converterDataBR(item['ÚLTIMO ENVIO RC']);
-        const hoje = new Date();
-        const diasUteis = dataRCDate ? calcularDiasUteis(dataRCDate, hoje) : 0;
-        
+        row.insertCell().textContent = item['DESCRIÇÃO DEMANDA'] || '';
+        row.insertCell().textContent = formatarDataBR(item['PREVISÃO PEDIDO']);
+
+        const dataPrevisao = converterDataBR(item['PREVISÃO PEDIDO']);
+        const diasAtraso = calcularDiasUteis(dataPrevisao, hoje);
+
         const diasCell = row.insertCell();
-        diasCell.textContent = `${diasUteis} dias`;
-        diasCell.classList.add("dias-sem-pedido");
-        
-        if (diasUteis > 7) {
-            diasCell.classList.add("critico");
-        } else if (diasUteis > 4) {
-            diasCell.classList.add("alerta");
+        diasCell.textContent = `${diasAtraso} dias`;
+        diasCell.classList.add('dias-sem-pedido');
+
+        if (diasAtraso > 7) {
+            diasCell.classList.add('critico');
+        } else if (diasAtraso > 3) {
+            diasCell.classList.add('alerta');
         }
     });
 
-    if (demandasSemPedido.length === 0) {
+    if (demandasFiltradas.length === 0) {
         const row = tableBody.insertRow();
         const cell = row.insertCell();
-        cell.colSpan = 6;
-        cell.textContent = 'Nenhuma demanda sem pedido há mais de 4 dias úteis.';
+        cell.colSpan = 8;
+        cell.textContent = 'Nenhuma demanda sem pedido com previsão vencida.';
         cell.style.textAlign = 'center';
     }
 }
+
+
 
 function validarLojasSubregional() {
     const lojasNorteFort = dadosPlanejamento.filter(item => item.SUB === 'NORTE' && item.BANDEIRA === 'FORT').map(item => item.Loja);
@@ -1209,7 +1220,6 @@ document.querySelector(".table-btn[title=\"Atualizar\"]").addEventListener("clic
 });
 
 document.querySelector(".table-btn[title=\"Exportar\"]").addEventListener("click", function() {
-    // Lógica para exportar dados da tabela para CSV
     let csvContent = "data:text/csv;charset=utf-8,";
     const rows = document.querySelectorAll("#demandas-sem-pedido-table tr");
     rows.forEach(function(row) {
@@ -1228,6 +1238,7 @@ document.querySelector(".table-btn[title=\"Exportar\"]").addEventListener("click
     link.click();
     document.body.removeChild(link);
 });
+// Event listeners para a tabela de família
 document.getElementById("refresh-family-table").addEventListener("click", function() {
     atualizarTabelaFamilia();
 });
