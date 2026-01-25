@@ -41,6 +41,13 @@
     --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.modern-table td.positive-value {
+    color: var(--success);
+}
+.modern-table td.negative-value {
+    color: var(--accent-red);
+}
+
 .link {
     padding: .3rem .5rem;
     background: var(--info);
